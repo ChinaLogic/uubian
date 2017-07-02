@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+</head>
+<body>
+<textarea rows="5" cols="30" id="text"></textarea>
+<audio src="" controls="controls" id="audio">
+</audio>
+<script type="text/javascript">
+
+var oldtext='你好';
+
+
+function hello(){ 
+	var newtext = $('#text').val();
+	var reg = /[a-zA-Z]/g;
+	newtext=newtext.replace(reg,"");
+	if(newtext.length>oldtext.length){
+		var text=newtext.substring(oldtext.length);
+		console.log(text);
+		oldtext=newtext;
+		$('#audio').attr('src','http://localhost:5001/ttf/ttf/'+text+'/gggg.wav');
+		var audio = $("#audio")[0];  
+		audio.pause();  
+		audio.play();
+	}
+	
+} 
+
+	//重复执行某个方法 
+	var t1 = window.setInterval(hello,1000); 
+
+
+</script>
+</body>
+</html>
