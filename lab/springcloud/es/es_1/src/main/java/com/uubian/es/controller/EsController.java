@@ -25,8 +25,7 @@ public class EsController {
 	
 	@GetMapping("/test")
 	public Article getAll(){
-		//template.createIndex(Article.class);
-		
+	
 		Article article= new Article();
 		article.setTitle("纪念刘和珍君");
 		article.setContent("一个名叫纪念刘和珍君的文章的内容");
@@ -34,7 +33,6 @@ public class EsController {
 	}
 	@GetMapping("/query/{title}")
 	public List<Article> Query(@PathVariable String title){
-		//template.createIndex(Article.class);
 		
 		return articleRepository.findByTitle(title);
 	}
