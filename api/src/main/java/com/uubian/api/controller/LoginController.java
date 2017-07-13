@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,22 +32,27 @@ public class LoginController {
 	public TockenRepository tockenRepository;
     
     @Privilege
-	@GetMapping("/login/{username}/{password}")
-	public Map<String,Object> login(@PathVariable String username,@PathVariable String password){
-		UserBase userBase = useBaseRepository.getUserBaseByUsername(username);
-		Map<String,Object> map = new HashMap<String, Object>();
-		if(userBase!=null&&BCrypt.checkpw(password, userBase.getPassword())){
-			String access_token = TokenFactory.productionToken();
-			Token token = new Token();
-			token.setAccess_token(access_token);
-			token.setUserBase(userBase);
-			tockenRepository.setTocken(access_token, userBase.getId()+"");
-			map.put("msg", Message.init(200));
-			map.put("token", token);
-		}else{
-			map.put("msg", Message.init(202,"用户名或者密码错误"));
-		}
-		return map;
+    @PostMapping("/login")
+	public Map<String,Object> login(@RequestBody UserBase temp){
+    	Map<String,Object> map = new HashMap<String, Object>();
+    	if(temp!=null&&temp.getUsername()!=null&&temp.getPassword()!=null){
+    		UserBase userBase = useBaseRepository.getUserBaseByUsername(temp.getUsername());
+    		if(userBase!=null&&BCrypt.checkpw(temp.getPassword(), userBase.getPassword())){
+    			String access_token = TokenFactory.productionToken();
+    			Token token = new Token();
+    			token.setAccess_token(access_token);
+    			token.setUserBase(userBase);
+    			tockenRepository.setTocken(access_token, userBase.getId()+"");
+    			map.put("msg", Message.init(200));
+    			map.put("token", token);
+    		}else{
+    			map.put("msg", Message.init(202,"用户名或者密码错误"));
+    		}
+    		
+    	}else{
+    		map.put("msg", Message.init(202,"用户名或密码为空"));
+    	}
+    	return map;
 		
 	}
 	@GetMapping("/logout")
