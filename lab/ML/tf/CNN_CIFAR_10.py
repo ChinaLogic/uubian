@@ -51,14 +51,14 @@ def creatCNN(traindata,trainlable,testdata,testlabels):
         if i % 10 == 0:  
             train_accuracy=accuracy.eval(feed_dict={x: testdata, y_: testlabels, keep_prob:1.0})
             print ("step %d, training accuracy %g" % (i, train_accuracy))
-            saver.save(sess, "F:/test/test/model.ckpt")
+            saver.save(sess, "D:/test/test/model.ckpt")
         sj_data = []
         sj_lable = []
         for j in range(100):
-            sj=random.randint(0, 1000)
-            sj_data[j,:,:]=traindata[sj,:,:]
-            sj_lable[j,:,:]=trainlable[sj,:,:]
-        train_step.run(feed_dict={x: traindata, y_: trainlable, keep_prob:0.001})  
+            sj=random.randint(0, 100)
+            sj_data.append(traindata[sj,:,:])
+            sj_lable.append(trainlable[sj,:])
+        train_step.run(feed_dict={x: traindata, y_: trainlable, keep_prob:0.1})  
     
 
    
@@ -76,19 +76,13 @@ def labels_vector(l):
         temp[l[i]]=1
         Labels.append(temp)
     return Labels
-def to1024(l):
-    Labels = []
-    m = len(l)
-    for i in range(m):
-        Labels.append(l[i:1024])
-    return Labels
-trainingMat,Labels=load('F:/cifar-10-batches-py/data_batch_1')
+trainingMat,Labels=load('D:/cifar-10-batches-py/data_batch_1')
 Labels=to_categorical(Labels)
 trainingMat = dstack((trainingMat[:, :1024], trainingMat[:, 1024:2048],
                          trainingMat[:, 2048:])) / 255.
 trainingMat = reshape(trainingMat, [-1, 32, 32, 3])
 
-testTrainingMat,testLabels=load('F:/cifar-10-batches-py/test_batch')
+testTrainingMat,testLabels=load('D:/cifar-10-batches-py/test_batch')
 testLabels=to_categorical(testLabels)
 testTrainingMat = dstack((testTrainingMat[:, :1024], testTrainingMat[:, 1024:2048],
                          testTrainingMat[:, 2048:])) / 255.
