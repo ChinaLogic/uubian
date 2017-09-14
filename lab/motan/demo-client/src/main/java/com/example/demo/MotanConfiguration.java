@@ -12,7 +12,7 @@ import com.weibo.api.motan.config.springsupport.RegistryConfigBean;
 @Configuration
 	public class MotanConfiguration {
 
-	  @Bean
+	 @Bean
 	  public AnnotationBean motanAnnotationBean() {
 	    AnnotationBean motanAnnotationBean = new AnnotationBean();
 	    motanAnnotationBean.setPackage("com.example.demo.controller");
@@ -39,11 +39,16 @@ import com.weibo.api.motan.config.springsupport.RegistryConfigBean;
 	  @Bean(name = "basicRefererConfigBean")
 	  public BasicRefererConfigBean basicRefererConfigBean() {
 	    BasicRefererConfigBean config = new BasicRefererConfigBean();
-	    config.setProtocol("motan");
-	    config.setRegistry("registry");
-	    config.setThrowException(true);
+        config.setProtocol("motan");
+        config.setGroup("testgroup");
+        config.setRegistry("registry");
+        config.setApplication("myMotanDemo");
+        
+        config.setCheck(false);
+        config.setAccessLog(true);
+        config.setRetries(2);
+        config.setThrowException(true);
 	    return config;
 	  }
-	 
 
 }
